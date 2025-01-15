@@ -1,6 +1,6 @@
 requests
-plotly.graph_objects
-scipy.spatial
+plotly
+scipy
 folium
 streamlit_folium
 PIL
