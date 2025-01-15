@@ -3,7 +3,7 @@ plotly
 scipy
 folium
 streamlit_folium
-PIL
+Pillow
 time
 datetime
 os
