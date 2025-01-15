@@ -4,7 +4,6 @@ scipy
 folium
 streamlit_folium
 Pillow
-time
 datetime
 os
 io
