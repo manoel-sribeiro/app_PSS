@@ -662,12 +662,7 @@ with tab4:
                 thickness=20,
                 line=dict(color="black", width=0.5),
                 label=all_nodes,
-                color=["#A6CEE3", "#1F78B4", "#B2DF8A", "#33A02C"] + ["#FB9A99", "#E31A1C", "#FDBF6F"],
-                font=dict(
-                size=16,      # Tamanho maior para os rótulos
-                color="white",  # Cor branca para o texto
-                family="Arial Black"  # Fonte em negrito
-            )
+                color=["#A6CEE3", "#1F78B4", "#B2DF8A", "#33A02C"] + ["#FB9A99", "#E31A1C", "#FDBF6F"]
             ),
             link=dict(
                 source=sankey_sources,
@@ -762,7 +757,7 @@ with tab5:
     # Exibir o ranking
     for idx, triador in enumerate(triadores, start=1):
         st.markdown(f"### {idx}º Lugar: {triador['nome']}")
-        st.image(triador["foto"], width=150, caption=f"Contribuição: {triador['contribuicao']} kg")
+        st.image(triador["foto"], width=300, caption=f"Peso Triado: {triador['contribuicao']} kg")
         st.write("---")
 
     # Elementos de gamificação
