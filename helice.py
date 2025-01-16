@@ -663,6 +663,11 @@ with tab4:
                 line=dict(color="black", width=0.5),
                 label=all_nodes,
                 color=["#A6CEE3", "#1F78B4", "#B2DF8A", "#33A02C"] + ["#FB9A99", "#E31A1C", "#FDBF6F"],
+                font=dict(
+                size=16,      # Tamanho maior para os rótulos
+                color="white",  # Cor branca para o texto
+                family="Arial Black"  # Fonte em negrito
+            )
             ),
             link=dict(
                 source=sankey_sources,
