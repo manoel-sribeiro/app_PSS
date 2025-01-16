@@ -526,41 +526,167 @@ with tab4:
     col3.metric("Rejeitos (kg)", f"{total_rejeitos:,.0f}")
     col4.metric("Percentual Triado (%)", f"{percentual_triado:.2f}%")
 
-    # Gráfico de barras - Triagem por Cooperativa
-    st.subheader("📊 Material Recebido, Triado e Rejeitos por Cooperativa")
-    bar_data = filtered_df.groupby("Cooperativa").sum().reset_index()
-    fig_bar = px.bar(
-        bar_data,
-        x="Cooperativa",
-        y=["Material Recebido (kg)", "Material Triado (kg)", "Rejeitos (kg)"],
-        barmode="group",
-        title="Distribuição de Resíduos por Cooperativa",
-        labels={"value": "Quantidade (kg)", "Cooperativa": "Cooperativa"},
-        template="plotly_white",
-    )
-    st.plotly_chart(fig_bar, use_container_width=True)
+    # Tabs
+    tab11, tab21, tab31 = st.tabs(["📊 Visualizações", "🌐 Fluxograma", "📋 Dados Detalhados"])
 
-    # Gráfico de linha - Evolução Anual
-    st.subheader("📈 Evolução Anual da Triagem de Resíduos")
-    line_data = filtered_df.groupby("Ano").sum().reset_index()
-    fig_line = px.line(
-        line_data,
-        x="Ano",
-        y=["Material Recebido (kg)", "Material Triado (kg)", "Rejeitos (kg)"],
-        title="Evolução Anual dos Resíduos",
-        labels={"value": "Quantidade (kg)", "Ano": "Ano"},
-        markers=True,
-        template="plotly_white",
-    )
-    st.plotly_chart(fig_line, use_container_width=True)
+    # Tab 1 - Visualizações
+    with tab11:
+        # Gráfico de barras
+        st.subheader("📊 Material Recebido, Triado e Rejeitos por Cooperativa")
+        bar_data = filtered_df.groupby("Cooperativa").sum().reset_index()
+        fig_bar = px.bar(
+            bar_data,
+            x="Cooperativa",
+            y=["Material Recebido (kg)", "Material Triado (kg)", "Rejeitos (kg)"],
+            barmode="group",
+            title="Distribuição de Resíduos por Cooperativa",
+            labels={"value": "Quantidade (kg)", "Cooperativa": "Cooperativa"},
+            template="plotly_white",
+        )
+        st.plotly_chart(fig_bar, use_container_width=True)
 
-    # Tabela de Dados
-    st.subheader("📋 Dados Detalhados")
-    st.dataframe(filtered_df)
+        # Gráfico de linha
+        st.subheader("📈 Evolução Anual da Triagem de Resíduos")
+        line_data = filtered_df.groupby("Ano").sum().reset_index()
+        fig_line = px.line(
+            line_data,
+            x="Ano",
+            y=["Material Recebido (kg)", "Material Triado (kg)", "Rejeitos (kg)"],
+            title="Evolução Anual dos Resíduos",
+            labels={"value": "Quantidade (kg)", "Ano": "Ano"},
+            markers=True,
+            template="plotly_white",
+        )
+        st.plotly_chart(fig_line, use_container_width=True)
 
-    # Rodapé
-    st.markdown("---")
-    st.markdown("📢 **Acompanhe sua cooperativa e contribua para um mundo mais sustentável!** 🌍")
+        # Gráfico de Meta
+        st.subheader("🎯 Meta de Triagem")
+        fig_gauge = go.Figure(go.Indicator(
+            mode="gauge+number+delta",
+            value=percentual_triado,
+            delta={"reference": 80},  # Meta fictícia de 80%
+            gauge={
+                "axis": {"range": [0, 100]},
+                "bar": {"color": "green"},
+                "steps": [
+                    {"range": [0, 50], "color": "red"},
+                    {"range": [50, 80], "color": "yellow"},
+                ],
+            },
+            title={"text": "Percentual Triado (%)"},
+        ))
+        st.plotly_chart(fig_gauge, use_container_width=True)
+
+        # Gráfico Sunburst
+        st.subheader("🌟 Distribuição de Rejeitos")
+        sunburst_data = filtered_df.melt(id_vars=["Cooperativa"], 
+                                        value_vars=["Material Recebido (kg)", "Material Triado (kg)", "Rejeitos (kg)"])
+        fig_sunburst = px.sunburst(sunburst_data, path=["Cooperativa", "variable"], values="value",
+                                title="Distribuição de Resíduos")
+        st.plotly_chart(fig_sunburst, use_container_width=True)
+        
+        # Dados simulados
+        data = {
+            "Categoria": ["Plástico", "Papel", "Metal", "Vidro", "Orgânico"],
+            "Triado (kg)": [1200, 800, 500, 600, 300],
+            "Rejeito (kg)": [-200, -150, -80, -100, -50]
+        }
+
+        # Criando DataFrame
+        df = pd.DataFrame(data)
+
+        # Calculando os valores absolutos e ordenando
+        df['Valor Total (absoluto)'] = df['Triado (kg)'] + abs(df['Rejeito (kg)'])
+        df = df.sort_values(by='Valor Total (absoluto)', ascending=False)
+
+        # Criando gráfico de funil com particionamento
+        figF = go.Figure()
+
+        # Adicionando a parte triada
+        figF.add_trace(go.Funnel(
+            name="Triado",
+            y=df["Categoria"],
+            x=df["Triado (kg)"]
+        ))
+
+        # Adicionando a parte de rejeitos
+        figF.add_trace(go.Funnel(
+            name="Rejeito",
+            y=df["Categoria"],
+            x=abs(df["Rejeito (kg)"])
+        ))
+
+        # Configurações do layout
+        figF.update_layout(
+            title="Funil de Triagem de Resíduos",
+            funnelmode="stack",  # Define que as partes serão particionadas
+            xaxis_title="Quantidade (kg)",
+            yaxis_title="Categorias",
+            showlegend=True
+        )
+        # # Configuração do layout
+        # figF.update_layout(
+        #     title="Funil de Triagem de Resíduos",
+        #     funnelmode="stack",  # Empilhar os valores
+        #     legend=dict(title="Categorias")
+        # )
+
+        # Mostrar o gráfico
+        st.plotly_chart(figF, use_container_width=True)
+
+    # Tab 2 - Fluxograma
+    with tab21:
+        st.subheader("🌐 Fluxograma de Resíduos")
+        st.markdown("O fluxograma será implementado aqui, conectando origens aos destinos.")
+        # Adicionar implementação do fluxograma
+        # Dados fictícios para o fluxograma
+        sources = ["Comunidade", "DMLU", "COOTRAVIPA", "Catadores"]
+        destinations = ["COOPERTUCA", "UTC Lomba do Pinheiro", "Centro de Triagem da Vila Pinto"]
+        values = [2000, 1500, 1200, 1800, 3000, 2500, 2200, 1700, 2400, 1900, 2000, 1500]
+
+        # Mapear índices de fontes e destinos
+        all_nodes = sources + destinations
+        node_map = {name: idx for idx, name in enumerate(all_nodes)}
+
+        # Criar fluxos (sources -> destinations)
+        sankey_sources = [node_map["Comunidade"], node_map["Comunidade"], node_map["Comunidade"],
+                        node_map["DMLU"], node_map["DMLU"], node_map["DMLU"],
+                        node_map["COOTRAVIPA"], node_map["COOTRAVIPA"], node_map["COOTRAVIPA"],
+                        node_map["Catadores"], node_map["Catadores"], node_map["Catadores"]]
+        sankey_targets = [node_map["COOPERTUCA"], node_map["UTC Lomba do Pinheiro"], node_map["Centro de Triagem da Vila Pinto"]] * 4
+
+        # Criar o gráfico de Sankey
+        fig_sankey = go.Figure(data=[go.Sankey(
+            node=dict(
+                pad=15,
+                thickness=20,
+                line=dict(color="black", width=0.5),
+                label=all_nodes,
+                color=["#A6CEE3", "#1F78B4", "#B2DF8A", "#33A02C"] + ["#FB9A99", "#E31A1C", "#FDBF6F"],
+            ),
+            link=dict(
+                source=sankey_sources,
+                target=sankey_targets,
+                value=values,
+                color="rgba(31,120,180,0.5)"  # Transparência para os links
+            )
+        )])
+
+        # Adicionar título e layout
+        fig_sankey.update_layout(
+            title_text="Fluxograma de Resíduos",
+            font_size=10,
+            template="plotly_white",
+        )
+
+        # Mostrar no Streamlit
+        st.subheader("🔄 Fluxograma de Recebimento de Resíduos")
+        st.plotly_chart(fig_sankey, use_container_width=True)
+
+    # Tab 3 - Dados Detalhados
+    with tab31:
+        st.subheader("📋 Dados Detalhados")
+        st.dataframe(filtered_df)
 with tab5:
     # Função para carregar imagens via URL
     def load_image(url):
@@ -615,6 +741,24 @@ with tab5:
             st.markdown(f"**{pessoa['nome']}**")
             st.markdown(f"📦 **Peso doado:** {pessoa['peso']} kg")
             st.markdown(f"🌍 **Resíduo mais doado:** {pessoa['residuo']}")
+    
+    # Dados fictícios do ranking
+    triadores = [
+        {"nome": "Maria Silva", "contribuicao": 350, "foto": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTkMdWruPwhmCvJIoCqBLc5XBnCrra7es6dnQ&s"},
+        {"nome": "Rafaela Pereira", "contribuicao": 300, "foto": "https://newr7-r7-prod.web.arc-cdn.net/resizer/v2/MNSPQTFNABOUZIS77P3R3BKZYU.jpg?auth=d1aff334675165ea6ed39bb652689d98cb89248d1f03400fa1f6716e5d78dfdd&width=460&height=305"},
+        {"nome": "Ana Costa", "contribuicao": 280, "foto": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ2gyp-hggOmmKOX14WVLvZhul1rKpMBO7Jmw&s"},
+        {"nome": "Carlos Souza", "contribuicao": 250, "foto": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQEPwfjQ1QXU_aW5_05giaCFm_QhSeG5aQk3g&s"},
+    ]
+
+    # Exibir título e descrição
+    st.subheader("🏆 Ranking dos Triadores")
+    st.write("Confira os triadores que mais contribuíram para a triagem adequada dos resíduos.")
+
+    # Exibir o ranking
+    for idx, triador in enumerate(triadores, start=1):
+        st.markdown(f"### {idx}º Lugar: {triador['nome']}")
+        st.image(triador["foto"], width=150, caption=f"Contribuição: {triador['contribuicao']} kg")
+        st.write("---")
 
     # Elementos de gamificação
     st.markdown("---")
