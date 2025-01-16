@@ -836,7 +836,7 @@ with tab6:
 
     if material_img:
         img = Image.open(material_img)
-        st.sidebar.image(img, caption="Foto do Material", use_column_width=True)
+        st.sidebar.image(img, caption="Foto do Material")
 
     # Botão para adicionar o material
     if st.sidebar.button("Publicar Material"):
