@@ -702,7 +702,7 @@ with tab5:
             "nome": "Duda Beat",
             "peso": 125.4,
             "residuo": "Plástico",
-            "imagem": "https://media.hugogloss.uol.com.br/uploads/2023/10/duda-beat.jpg",
+            "imagem": "https://ofuxico.com.br/wp-content/uploads/2022/01/duda-beat-posando-em-comodo-de-parede-verde.jpg",
         },
         {
             "nome": "Angelina Jolie",
@@ -732,7 +732,10 @@ with tab5:
         with cols[i]:
             # Carregar imagem
            # img = load_image(pessoa["imagem"])
-            st.image(pessoa["imagem"], caption=pessoa["nome"])
+            try:
+                st.image(pessoa["imagem"], caption=pessoa["nome"])
+            except: 
+                st.markdown(f"**{pessoa['nome']}**")
             # Mostrar informações
             st.markdown(f"**{pessoa['nome']}**")
             st.markdown(f"📦 **Peso doado:** {pessoa['peso']} kg")
