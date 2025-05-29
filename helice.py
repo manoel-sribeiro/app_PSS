@@ -689,11 +689,6 @@ with tab4:
         st.dataframe(filtered_df)
 with tab5:
     # Função para carregar imagens via URL
-    #def load_image(url):
-     #   response = requests.get(url)
-      #  return Image.open(BytesIO(response.content))
-       # import requests
-
     def load_image(url):
         headers = {
             "User-Agent": "Mozilla/5.0"
