@@ -732,10 +732,7 @@ with tab5:
         with cols[i]:
             # Carregar imagem
            # img = load_image(pessoa["imagem"])
-            try:
-                st.image(pessoa["imagem"], caption=pessoa["nome"])
-            except: 
-                st.markdown(f"**{pessoa['nome']}**")
+
             # Mostrar informações
             st.markdown(f"**{pessoa['nome']}**")
             st.markdown(f"📦 **Peso doado:** {pessoa['peso']} kg")
