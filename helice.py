@@ -731,8 +731,10 @@ with tab5:
     for i, pessoa in enumerate(ranking_data):
         with cols[i]:
             # Carregar imagem
-           # img = load_image(pessoa["imagem"])
-
+            try:
+                st.image(pessoa["imagem"], caption=pessoa["nome"])
+            except: 
+                st.markdown(f"**{pessoa['nome']}**")
             # Mostrar informações
             st.markdown(f"**{pessoa['nome']}**")
             st.markdown(f"📦 **Peso doado:** {pessoa['peso']} kg")
@@ -774,7 +776,6 @@ with tab5:
 
     # Imagem de sustentabilidade
     sustentabilidade_url = "https://static.todamateria.com.br/upload/su/st/sustentabilidade-og.jpg"
-    # sustentabilidade_img = load_image(sustentabilidade_url)
     st.image(sustentabilidade_url,  caption="Faça parte desse movimento!")
 with tab6:
     # Título principal
