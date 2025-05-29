@@ -689,9 +689,27 @@ with tab4:
         st.dataframe(filtered_df)
 with tab5:
     # Função para carregar imagens via URL
-    def load_image(url):
-        response = requests.get(url)
+    #def load_image(url):
+     #   response = requests.get(url)
+      #  return Image.open(BytesIO(response.content))
+       # import requests
+
+def load_image(url):
+    headers = {
+        "User-Agent": "Mozilla/5.0"
+    }
+    response = requests.get(url, headers=headers)
+    response.raise_for_status()  # Garante que o erro HTTP seja capturado
+
+    content_type = response.headers.get("Content-Type", "")
+    if "image" not in content_type:
+        raise ValueError(f"Conteúdo não é imagem: {content_type}")
+
+    try:
         return Image.open(BytesIO(response.content))
+    except Exception as e:
+        raise ValueError(f"Erro ao abrir imagem: {e}")
+
 
     # Configuração da página
    # st.set_page_config(page_title="Ranking de Reciclagem", page_icon="♻️", layout="wide")
