@@ -688,25 +688,6 @@ with tab4:
         st.subheader("📋 Dados Detalhados")
         st.dataframe(filtered_df)
 with tab5:
-    # Função para carregar imagens via URL
-    def load_image(url):
-        headers = {
-            "User-Agent": "Mozilla/5.0"
-        }
-        try:
-            response = requests.get(url, headers=headers, timeout=10)
-            response.raise_for_status()
-            
-            content_type = response.headers.get("Content-Type", "")
-            if "image" not in content_type:
-                raise ValueError(f"URL não retornou uma imagem. Content-Type: {content_type}")
-            
-            return Image.open(BytesIO(response.content))
-        except Exception as e:
-            print(f"Erro ao carregar imagem: {url} -> {e}")
-            # Retorna uma imagem fallback (ex: branca de 1x1) ou None
-            return Image.new("RGB", (1, 1), (255, 255, 255))
-
 
     # Configuração da página
    # st.set_page_config(page_title="Ranking de Reciclagem", page_icon="♻️", layout="wide")
@@ -751,7 +732,7 @@ with tab5:
         with cols[i]:
             # Carregar imagem
            # img = load_image(pessoa["imagem"])
-           # st.image(img, caption=pessoa["nome"])
+            st.image(pessoa["imagem"], caption=pessoa["nome"])
             # Mostrar informações
             st.markdown(f"**{pessoa['nome']}**")
             st.markdown(f"📦 **Peso doado:** {pessoa['peso']} kg")
