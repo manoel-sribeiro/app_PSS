@@ -706,7 +706,7 @@ with tab5:
             "nome": "Bruna Marquezine",
             "peso": 125.4,
             "residuo": "Plástico",
-            "imagem": "https://www.cnnbrasil.com.br/wp-content/uploads/sites/12/2025/01/bruna-marquezine-e1736523593544.jpg?w=420&h=240&crop=1&quality=85",
+            "imagem": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRHzyJZecBCepoGRBJgwH41ylfICeczEMBtTwLKyPYsv4RTzxehFnt4eOBP1_Nuzn6j5qk&usqp=CAU",
         },
         {
             "nome": "Angelina Jolie",
