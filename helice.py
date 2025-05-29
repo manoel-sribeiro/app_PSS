@@ -694,21 +694,23 @@ with tab5:
       #  return Image.open(BytesIO(response.content))
        # import requests
 
-def load_image(url):
-    headers = {
-        "User-Agent": "Mozilla/5.0"
-    }
-    response = requests.get(url, headers=headers)
-    response.raise_for_status()  # Garante que o erro HTTP seja capturado
-
-    content_type = response.headers.get("Content-Type", "")
-    if "image" not in content_type:
-        raise ValueError(f"Conteúdo não é imagem: {content_type}")
-
-    try:
-        return Image.open(BytesIO(response.content))
-    except Exception as e:
-        raise ValueError(f"Erro ao abrir imagem: {e}")
+    def load_image(url):
+        headers = {
+            "User-Agent": "Mozilla/5.0"
+        }
+        try:
+            response = requests.get(url, headers=headers, timeout=10)
+            response.raise_for_status()
+            
+            content_type = response.headers.get("Content-Type", "")
+            if "image" not in content_type:
+                raise ValueError(f"URL não retornou uma imagem. Content-Type: {content_type}")
+            
+            return Image.open(BytesIO(response.content))
+        except Exception as e:
+            print(f"Erro ao carregar imagem: {url} -> {e}")
+            # Retorna uma imagem fallback (ex: branca de 1x1) ou None
+            return Image.new("RGB", (1, 1), (255, 255, 255))
 
 
     # Configuração da página
