@@ -750,8 +750,8 @@ with tab5:
     for i, pessoa in enumerate(ranking_data):
         with cols[i]:
             # Carregar imagem
-            img = load_image(pessoa["imagem"])
-            st.image(img, caption=pessoa["nome"])
+           # img = load_image(pessoa["imagem"])
+           # st.image(img, caption=pessoa["nome"])
             # Mostrar informações
             st.markdown(f"**{pessoa['nome']}**")
             st.markdown(f"📦 **Peso doado:** {pessoa['peso']} kg")
