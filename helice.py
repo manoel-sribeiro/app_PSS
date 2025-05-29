@@ -703,10 +703,10 @@ with tab5:
     # Dados fictícios do ranking
     ranking_data = [
         {
-            "nome": "Bruna Marquezine",
+            "nome": "Duda Beat",
             "peso": 125.4,
             "residuo": "Plástico",
-            "imagem": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRHzyJZecBCepoGRBJgwH41ylfICeczEMBtTwLKyPYsv4RTzxehFnt4eOBP1_Nuzn6j5qk&usqp=CAU",
+            "imagem": "https://media.hugogloss.uol.com.br/uploads/2023/10/duda-beat.jpg",
         },
         {
             "nome": "Angelina Jolie",
