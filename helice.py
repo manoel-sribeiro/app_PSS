@@ -739,7 +739,7 @@ with tab5:
             "nome": "A Blogueirinha",
             "peso": 84.2,
             "residuo": "Metal",
-            "imagem": "https://pbs.twimg.com/media/GOMYD0AXEAEq_m9?format=jpg&name=large",
+            "imagem": "https://www.otempo.com.br/adobe/dynamicmedia/deliver/dm-aid--bb14c990-a7f0-4db1-a04d-bfda9aa2474d/entretenimento-blogueirinha-de-frente-com-blogueirinha-1708757967.jpg?quality=90&preferwebp=true",
         },
     ]
 
