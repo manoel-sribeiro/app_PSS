@@ -389,8 +389,8 @@ with tab3:
                 st.write("Informações salvas!")
         
     with st.expander("Registro de resíduo final do turno"):
-        with st.form(key= "residuo-final", clear_on_submit=True):
-            #inicializa as variáveis
+        with st.form(key="residuo-final", clear_on_submit=True):
+            # inicializa as variáveis
             peso_rejeito = 0.0
             peso_plastico = 0.0
             peso_papel_papelao = 0.0
@@ -399,27 +399,19 @@ with tab3:
             peso_sacolinha = 0.0
             peso_outros = 0.0
             data = st.date_input("Data", key="residuo-final")
-            peso_rejeito = st.number_input("PESO DO REJEITO (kg)", min_value=0.0, step=0.1, format="%f", value = peso_rejeito)
-            peso_plastico = st.number_input("PESO DO PLÁSTICO (kg)", min_value=0.0, step=0.1, format="%f", value = peso_plastico)
-            peso_papel_papelao = st.number_input("PESO DO PAPEL/PAPLÃO (kg)", min_value=0.0, step=0.1, format="%f", value = peso_papel_papelao)
-            peso_aluminio_metal = st.number_input("PESO DO ALUMÍNIO/METAL (kg)", min_value=0.0, step=0.1, format="%f", value = peso_aluminio_metal)
-            peso_vidro = st.number_input("PESO DO VIDRO (kg)", min_value=0.0, step=0.1, format="%f", value = peso_vidro)
-            peso_sacolinha = st.number_input("PESO DA SACOLINHA (kg)", min_value=0.0, step=0.1, format="%f", value = peso_sacolinha)
-            peso_outros = st.number_input("PESO DE OUTROS MATERIAIS (kg)", min_value=0.0, step=0.1, format="%f", value = peso_outros)
-                # Permitir que o usuário faça o upload de uma imagem
+            peso_rejeito = st.number_input("PESO DO REJEITO (kg)", min_value=0.0, step=0.1, format="%f", value=peso_rejeito)
+            peso_plastico = st.number_input("PESO DO PLÁSTICO (kg)", min_value=0.0, step=0.1, format="%f", value=peso_plastico)
+            peso_papel_papelao = st.number_input("PESO DO PAPEL/PAPLÃO (kg)", min_value=0.0, step=0.1, format="%f", value=peso_papel_papelao)
+            peso_aluminio_metal = st.number_input("PESO DO ALUMÍNIO/METAL (kg)", min_value=0.0, step=0.1, format="%f", value=peso_aluminio_metal)
+            peso_vidro = st.number_input("PESO DO VIDRO (kg)", min_value=0.0, step=0.1, format="%f", value=peso_vidro)
+            peso_sacolinha = st.number_input("PESO DA SACOLINHA (kg)", min_value=0.0, step=0.1, format="%f", value=peso_sacolinha)
+            peso_outros = st.number_input("PESO DE OUTROS MATERIAIS (kg)", min_value=0.0, step=0.1, format="%f", value=peso_outros)
+
+            # Permitir que o usuário faça o upload de uma imagem
             uploaded_file = st.file_uploader("Escolha uma imagem", type=["jpg", "png", "jpeg"])
 
-            # Verificar se o usuário fez upload de uma imagem
-            if uploaded_file is not None:
-                # Abrir a imagem com o Pillow (PIL)
-                img = Image.open(uploaded_file)
-                
-                # Exibir a imagem no Streamlit
-                #st.image(img, caption="Imagem carregada.")
-                file_name, file_extension = os.path.splitext(uploaded_file.name)
-                
-            st.write("Informações salvas!")
-            
+            st.write("Informações salvas!") # Esta mensagem deve ser exibida após o salvamento, não antes
+
             submited = st.form_submit_button("Salvar")
             if submited:
                 dfrt = pd.DataFrame()
@@ -434,11 +426,23 @@ with tab3:
                     "Peso de Outros Materiais Final": [peso_outros]
                 }
                 dfrt = pd.DataFrame(dados)
-                
-                dfrt.to_csv("residuo_final_turno.csv", mode="a", header=False,index=False, encoding="utf-8")
-                # Gera um nome de arquivo único com base na data e hora atual
-                unique_filename = f"imagem_{int(time.time())}.{file_extension}"
-                img.save(unique_filename)    
+
+                dfrt.to_csv("residuo_final_turno.csv", mode="a", header=False, index=False, encoding="utf-8")
+
+                # Processar e salvar a imagem SOMENTE SE uma foi carregada
+                if uploaded_file is not None:
+                    try:
+                        img = Image.open(uploaded_file)
+                        file_name, file_extension = os.path.splitext(uploaded_file.name)
+                        unique_filename = f"imagem_{int(time.time())}.{file_extension}"
+                        img.save(unique_filename)
+                        st.success(f"Imagem salva como: {unique_filename}")
+                    except Exception as e:
+                        st.error(f"Erro ao salvar a imagem: {e}")
+                else:
+                    st.warning("Nenhuma imagem foi carregada para o registro final do turno.")
+
+                st.success("Informações salvas com sucesso!") # Mova esta mensagem para dentro do bloco submited 55ALU 
             
             
                 
