@@ -389,8 +389,8 @@ with tab3:
                 st.write("Informações salvas!")
         
     with st.expander("Registro de resíduo final do turno"):
-        with st.form(key="residuo-final", clear_on_submit=True):
-            # inicializa as variáveis
+        with st.form(key= "residuo-final", clear_on_submit=True):
+            #inicializa as variáveis
             peso_rejeito = 0.0
             peso_plastico = 0.0
             peso_papel_papelao = 0.0
@@ -399,19 +399,27 @@ with tab3:
             peso_sacolinha = 0.0
             peso_outros = 0.0
             data = st.date_input("Data", key="residuo-final")
-            peso_rejeito = st.number_input("PESO DO REJEITO (kg)", min_value=0.0, step=0.1, format="%f", value=peso_rejeito)
-            peso_plastico = st.number_input("PESO DO PLÁSTICO (kg)", min_value=0.0, step=0.1, format="%f", value=peso_plastico)
-            peso_papel_papelao = st.number_input("PESO DO PAPEL/PAPLÃO (kg)", min_value=0.0, step=0.1, format="%f", value=peso_papel_papelao)
-            peso_aluminio_metal = st.number_input("PESO DO ALUMÍNIO/METAL (kg)", min_value=0.0, step=0.1, format="%f", value=peso_aluminio_metal)
-            peso_vidro = st.number_input("PESO DO VIDRO (kg)", min_value=0.0, step=0.1, format="%f", value=peso_vidro)
-            peso_sacolinha = st.number_input("PESO DA SACOLINHA (kg)", min_value=0.0, step=0.1, format="%f", value=peso_sacolinha)
-            peso_outros = st.number_input("PESO DE OUTROS MATERIAIS (kg)", min_value=0.0, step=0.1, format="%f", value=peso_outros)
-
-            # Permitir que o usuário faça o upload de uma imagem
+            peso_rejeito = st.number_input("PESO DO REJEITO (kg)", min_value=0.0, step=0.1, format="%f", value = peso_rejeito)
+            peso_plastico = st.number_input("PESO DO PLÁSTICO (kg)", min_value=0.0, step=0.1, format="%f", value = peso_plastico)
+            peso_papel_papelao = st.number_input("PESO DO PAPEL/PAPLÃO (kg)", min_value=0.0, step=0.1, format="%f", value = peso_papel_papelao)
+            peso_aluminio_metal = st.number_input("PESO DO ALUMÍNIO/METAL (kg)", min_value=0.0, step=0.1, format="%f", value = peso_aluminio_metal)
+            peso_vidro = st.number_input("PESO DO VIDRO (kg)", min_value=0.0, step=0.1, format="%f", value = peso_vidro)
+            peso_sacolinha = st.number_input("PESO DA SACOLINHA (kg)", min_value=0.0, step=0.1, format="%f", value = peso_sacolinha)
+            peso_outros = st.number_input("PESO DE OUTROS MATERIAIS (kg)", min_value=0.0, step=0.1, format="%f", value = peso_outros)
+                # Permitir que o usuário faça o upload de uma imagem
             uploaded_file = st.file_uploader("Escolha uma imagem", type=["jpg", "png", "jpeg"])
 
-            st.write("Informações salvas!") # Esta mensagem deve ser exibida após o salvamento, não antes
-
+            # Verificar se o usuário fez upload de uma imagem
+            if uploaded_file is not None:
+                # Abrir a imagem com o Pillow (PIL)
+                img = Image.open(uploaded_file)
+                
+                # Exibir a imagem no Streamlit
+                #st.image(img, caption="Imagem carregada.")
+                file_name, file_extension = os.path.splitext(uploaded_file.name)
+                
+            st.write("Informações salvas!")
+            
             submited = st.form_submit_button("Salvar")
             if submited:
                 dfrt = pd.DataFrame()
@@ -426,23 +434,11 @@ with tab3:
                     "Peso de Outros Materiais Final": [peso_outros]
                 }
                 dfrt = pd.DataFrame(dados)
-
-                dfrt.to_csv("residuo_final_turno.csv", mode="a", header=False, index=False, encoding="utf-8")
-
-                # Processar e salvar a imagem SOMENTE SE uma foi carregada
-                if uploaded_file is not None:
-                    try:
-                        img = Image.open(uploaded_file)
-                        file_name, file_extension = os.path.splitext(uploaded_file.name)
-                        unique_filename = f"imagem_{int(time.time())}.{file_extension}"
-                        img.save(unique_filename)
-                        st.success(f"Imagem salva como: {unique_filename}")
-                    except Exception as e:
-                        st.error(f"Erro ao salvar a imagem: {e}")
-                else:
-                    st.warning("Nenhuma imagem foi carregada para o registro final do turno.")
-
-                st.success("Informações salvas com sucesso!") # Mova esta mensagem para dentro do bloco submited 55ALU 
+                
+                dfrt.to_csv("residuo_final_turno.csv", mode="a", header=False,index=False, encoding="utf-8")
+                # Gera um nome de arquivo único com base na data e hora atual
+                unique_filename = f"imagem_{int(time.time())}.{file_extension}"
+                img.save(unique_filename)    
             
             
                 
@@ -641,7 +637,7 @@ with tab4:
     # Tab 2 - Fluxograma
     with tab21:
         st.subheader("🌐 Fluxograma de Resíduos")
-        st.markdown("O fluxograma será implementado aqui, conectando origens aos destinos.")
+        #st.markdown("O fluxograma será implementado aqui, conectando origens aos destinos.")
         # Adicionar implementação do fluxograma
         # Dados fictícios para o fluxograma
         sources = ["Comunidade", "DMLU", "COOTRAVIPA", "Catadores"]
@@ -666,7 +662,7 @@ with tab4:
                 thickness=20,
                 line=dict(color="black", width=0.5),
                 label=all_nodes,
-                color=["#A6CEE3", "#1F78B4", "#B2DF8A", "#33A02C"] + ["#FB9A99", "#E31A1C", "#FDBF6F"]
+                color=["#A6CEE3", "#1F78B4", "#B2DF8A", "#33A02C"] + ["#FB9A99", "#E31A1C", "#FDBF6F"],
             ),
             link=dict(
                 source=sankey_sources,
@@ -692,6 +688,10 @@ with tab4:
         st.subheader("📋 Dados Detalhados")
         st.dataframe(filtered_df)
 with tab5:
+    # Função para carregar imagens via URL
+    def load_image(url):
+        response = requests.get(url)
+        return Image.open(BytesIO(response.content))
 
     # Configuração da página
    # st.set_page_config(page_title="Ranking de Reciclagem", page_icon="♻️", layout="wide")
@@ -703,10 +703,10 @@ with tab5:
     # Dados fictícios do ranking
     ranking_data = [
         {
-            "nome": "Duda Beat",
+            "nome": "Bruna Marquezine",
             "peso": 125.4,
             "residuo": "Plástico",
-            "imagem": "https://ofuxico.com.br/wp-content/uploads/2022/01/duda-beat-posando-em-comodo-de-parede-verde.jpg",
+            "imagem": "https://upload.wikimedia.org/wikipedia/commons/2/2b/Marquezine_by_Arezzo_01.jpg",
         },
         {
             "nome": "Angelina Jolie",
@@ -724,7 +724,7 @@ with tab5:
             "nome": "A Blogueirinha",
             "peso": 84.2,
             "residuo": "Metal",
-            "imagem": "https://www.otempo.com.br/adobe/dynamicmedia/deliver/dm-aid--bb14c990-a7f0-4db1-a04d-bfda9aa2474d/entretenimento-blogueirinha-de-frente-com-blogueirinha-1708757967.jpg?quality=90&preferwebp=true",
+            "imagem": "https://pbs.twimg.com/media/GOMYD0AXEAEq_m9?format=jpg&name=large",
         },
     ]
 
@@ -735,10 +735,8 @@ with tab5:
     for i, pessoa in enumerate(ranking_data):
         with cols[i]:
             # Carregar imagem
-            try:
-                st.image(pessoa["imagem"], caption=pessoa["nome"])
-            except: 
-                st.markdown(f"**{pessoa['nome']}**")
+            img = load_image(pessoa["imagem"])
+            st.image(img, caption=pessoa["nome"])
             # Mostrar informações
             st.markdown(f"**{pessoa['nome']}**")
             st.markdown(f"📦 **Peso doado:** {pessoa['peso']} kg")
@@ -759,7 +757,7 @@ with tab5:
     # Exibir o ranking
     for idx, triador in enumerate(triadores, start=1):
         st.markdown(f"### {idx}º Lugar: {triador['nome']}")
-        st.image(triador["foto"], width=300, caption=f"Peso Triado: {triador['contribuicao']} kg")
+        st.image(triador["foto"], width=150, caption=f"Contribuição: {triador['contribuicao']} kg")
         st.write("---")
 
     # Elementos de gamificação
@@ -780,6 +778,7 @@ with tab5:
 
     # Imagem de sustentabilidade
     sustentabilidade_url = "https://static.todamateria.com.br/upload/su/st/sustentabilidade-og.jpg"
+    # sustentabilidade_img = load_image(sustentabilidade_url)
     st.image(sustentabilidade_url,  caption="Faça parte desse movimento!")
 with tab6:
     # Título principal
@@ -837,7 +836,7 @@ with tab6:
 
     if material_img:
         img = Image.open(material_img)
-        st.sidebar.image(img, caption="Foto do Material")
+        st.sidebar.image(img, caption="Foto do Material", use_column_width=True)
 
     # Botão para adicionar o material
     if st.sidebar.button("Publicar Material"):
