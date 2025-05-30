@@ -706,7 +706,7 @@ with tab5:
             "nome": "Bruna Marquezine",
             "peso": 125.4,
             "residuo": "Plástico",
-            "imagem": "https://upload.wikimedia.org/wikipedia/commons/2/2b/Marquezine_by_Arezzo_01.jpg",
+            "imagem": "https://caras.com.br/media/_versions/2025/01/angelina-jolie_widelg.jpg",
         },
         {
             "nome": "Angelina Jolie",
