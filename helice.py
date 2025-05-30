@@ -706,7 +706,7 @@ with tab5:
             "nome": "Bruna Marquezine",
             "peso": 125.4,
             "residuo": "Plástico",
-            "imagem": "https://caras.com.br/media/_versions/2025/01/angelina-jolie_widelg.jpg",
+            "imagem": "https://caras.com.br/media/_versions/2025/03/bruna-marquezine-no-oscar-3_widelg.jpg",
         },
         {
             "nome": "Angelina Jolie",
